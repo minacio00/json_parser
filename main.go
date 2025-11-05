@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
+	"log"
 	"os"
 )
 
@@ -11,6 +12,11 @@ func check(e error) {
 	if e != nil {
 		panic(e)
 	}
+}
+
+func closeHelper(f *os.File) {
+	err := f.Close()
+	check(err)
 }
 
 func main() {
@@ -21,16 +27,19 @@ func main() {
 	// file
 	f, err := os.Open(*fPath)
 	check(err)
-	defer f.Close()
+	defer closeHelper(f)
 
 	// read
 	r := bufio.NewScanner(f)
-	r.Split(bufio.ScanRunes)
+	r.Split(bufio.ScanBytes)
 	i := 0
 	for r.Scan() {
 		s := r.Text()
-		rr := []rune(s)[0]
-		fmt.Printf("%q \n", rr)
+		// rr := string(s)
+		fmt.Printf("%q \n", s)
 		i++
+	}
+	if err := r.Err(); err != nil {
+		log.Fatalf("scan error: %v", err)
 	}
 }
