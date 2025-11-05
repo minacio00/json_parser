@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"flag"
-	"fmt"
 	"log"
 	"os"
 )
@@ -36,7 +35,9 @@ func main() {
 	for r.Scan() {
 		s := r.Text()
 		// rr := string(s)
-		fmt.Printf("%q \n", s)
+		// fmt.Printf("%q \n", s)
+		Lex(s)
+
 		i++
 	}
 	if err := r.Err(); err != nil {
